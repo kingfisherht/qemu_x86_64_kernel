@@ -67,12 +67,12 @@ OBJDUMP = $(CROSS_COMPILE)objdump
 cc-option = $(shell if $(CC) $(1) -S -o /dev/null -xc /dev/null \
 	> /dev/null 2>&1; then echo "$(1)"; else echo "$(2)"; fi ;)
 
-CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -Wall -Werror
+CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -Wall
 CFLAGS += -g -Wall -MD -D__KERNEL__ 
 CFLAGS += -ffreestanding -fno-common -nostdlib -I arch/x86_64/include -Iinclude -gdwarf-2 $(XFLAGS) $(OPT) 
 CFLAGS += $(call cc-option, -fno-stack-protector, "")
 CFLAGS += $(call cc-option, -fno-stack-protector-all, "")
-ASFLAGS = -gdwarf-2 -Wa,-divide -D__ASSEMBLY__ -Iinclude -I arch/x86_64/include $(XFLAGS)
+ASFLAGS = -gdwarf-2 -fno-pie -Wa,-divide -D__ASSEMBLY__ -Iinclude -I arch/x86_64/include $(XFLAGS)
 
 MODULEC_FLAGS=$(CFLAGS) -D_MODULE
 $(KOBJ_DIR)/%.o: kernel/%.c
