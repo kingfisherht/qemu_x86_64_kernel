@@ -106,7 +106,7 @@ ifndef CPUS
 CPUS := $(shell grep -c ^processor /proc/cpuinfo 2>/dev/null || sysctl -n hw.ncpu)
 endif
 QEMUOPTS =-enable-kvm -cpu host,+x2apic -vga vmware -display vnc=192.168.10.2:10 \
-   -hdb yaos.img -smp $(CPUS) -m 512 $(QEMUEXTRA)
+   -hda yaos.img -smp $(CPUS) -m 512 $(QEMUEXTRA)
 
 yaos.img: $(OUT)/bootblock
 	dd if=/dev/zero of=yaos.img count=10000

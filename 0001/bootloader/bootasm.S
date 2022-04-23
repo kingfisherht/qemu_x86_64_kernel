@@ -9,6 +9,18 @@ start:
   movw    %ax,%ds
   movw    %ax,%es
   movw    %ax,%ss
+#debug
+debug:
+    movw    $msg,   %bp
+    movw    len,    %cx  
+    movb    $0x05,  %dh  
+    movb    $0x08,  %dl  
+    movb    $0x01,  %al  
+    movb    $0x13,  %ah  
+    movb    $0x01,  %bl  
+    movb    $0x00,  %bh  
+  
+    int     $0x10 
   #打开A20
 seta20.1:
   inb     $0x64,%al               # Wait for not busy
@@ -57,4 +69,7 @@ gdtdesc:
   .word   (gdtdesc - gdt - 1)             # sizeof(gdt) - 1
   .long   gdt                             # address gdt
   
-
+msg:
+  .asciz "hello world \n"
+len:
+   .int . - msg
