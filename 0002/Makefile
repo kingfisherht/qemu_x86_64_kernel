@@ -6,7 +6,7 @@ X64 = 1
 
 BITS = 64
 XFLAGS = -DDEBUG -std=gnu11 -m64 -DX64 -mcmodel=kernel -mtls-direct-seg-refs -mno-red-zone 
-LDFLAGS = -m elf_x86_64 -nodefaultlibs  
+LDFLAGS = -m elf_x86_64 -nodefaultlibs
 
 FSGSBASE=$(shell cat /proc/cpuinfo|grep fsgsbase)
 ifneq ($(strip $(FSGSBASE)),)
@@ -60,7 +60,7 @@ CFLAGS += -g -Wall -MD -D__KERNEL__ -fno-omit-frame-pointer
 CFLAGS += -ffreestanding -fno-common -nostdlib -I arch/x86_64/include -Iinclude -I bsd/sys -gdwarf-2 $(XFLAGS) $(OPT) -fno-stack-protector
 CFLAGS += $(call cc-option, -fno-stack-protector, "")
 CFLAGS += $(call cc-option, -fno-stack-protector-all, "")
-ASFLAGS = -gdwarf-2 -Wa,-divide -D__ASSEMBLY__ -Iinclude -I arch/x86_64/include $(XFLAGS)
+ASFLAGS = -fno-pic -gdwarf-2 -Wa,-divide -D__ASSEMBLY__ -Iinclude -I arch/x86_64/include $(XFLAGS)
 
 MODULEC_FLAGS=$(CFLAGS) -D_MODULE
 $(KOBJ_DIR)/%.o: kernel/%.c
@@ -117,6 +117,7 @@ ENTRYCODE = $(ARCHOBJ_DIR)/entry64.o
 LINKSCRIPT = arch/x86_64/kernel64.ld
 LIBS=
 $(OUT)/kernel.elf: $(OBJS)   $(LINKSCRIPT) 
+	$(warning "zxp objs: $(OBJS)")
 	@mkdir -p $(OUT)
 	$(LD) $(LDFLAGS) -T $(LINKSCRIPT) -o $(OUT)/kernel.elf \
 		$(OBJS) $(LIBS) 
